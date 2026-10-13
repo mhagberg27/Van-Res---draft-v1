@@ -1,0 +1,144 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Athletics Van Reservations</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <a class="skip-link" href="#main">Skip to main content</a>
+
+  <header class="site-header">
+    <div class="wrap header-inner">
+      <div>
+        <p class="eyebrow">W&amp;L Physical Education and Athletics</p>
+        <h1>Van Reservations</h1>
+      </div>
+      <div class="header-actions">
+        <div id="authArea" class="auth-area"></div>
+        <button id="reserveBtn" class="btn on-dark" type="button">Reserve a van</button>
+      </div>
+    </div>
+  </header>
+
+  <main id="main" class="wrap">
+    <div id="demoBanner" class="banner" hidden>
+      Demo mode: reservations are saved only in this browser. Add your Power Automate URLs in config.js to go live.
+    </div>
+
+    <p class="rules">
+      First come, first served. Vans are reserved by the full day (24 hours, midnight to midnight).
+      Once a van is reserved, it is unavailable to everyone else for those dates.
+    </p>
+
+    <div class="toolbar">
+      <div class="view-toggle" role="group" aria-label="Choose a view">
+        <button type="button" class="toggle" data-view="list" aria-pressed="true">List</button>
+        <button type="button" class="toggle" data-view="calendar" aria-pressed="false">Calendar</button>
+      </div>
+      <ul class="legend" aria-label="Legend">
+        <li><span class="swatch ok" aria-hidden="true"></span>Available</li>
+        <li><span class="swatch busy" aria-hidden="true"></span>Reserved</li>
+      </ul>
+    </div>
+    <p id="status" class="status"></p>
+
+    <!-- LIST VIEW -->
+    <section id="listView" aria-labelledby="listHeading">
+      <div class="section-head">
+        <h2 id="listHeading">Fleet availability</h2>
+        <label class="inline-field" for="listDate">Show date
+          <input type="date" id="listDate">
+        </label>
+      </div>
+      <div id="vanList" class="van-grid"></div>
+    </section>
+
+    <!-- CALENDAR VIEW -->
+    <section id="calendarView" aria-labelledby="calHeading" hidden>
+      <div class="section-head">
+        <h2 id="calHeading" aria-live="polite">Month</h2>
+        <div class="month-nav">
+          <button type="button" class="btn ghost" id="prevMonth" aria-label="Previous month">&#8249;</button>
+          <button type="button" class="btn ghost" id="todayBtn">Today</button>
+          <button type="button" class="btn ghost" id="nextMonth" aria-label="Next month">&#8250;</button>
+        </div>
+      </div>
+      <div class="cal-head" aria-hidden="true">
+        <div>Sun</div><div>Mon</div><div>Tue</div><div>Wed</div><div>Thu</div><div>Fri</div><div>Sat</div>
+      </div>
+      <div id="calGrid" class="cal-grid"></div>
+
+      <div class="day-panel" aria-labelledby="dayHeading">
+        <h3 id="dayHeading">Day</h3>
+        <div id="dayDetail"></div>
+      </div>
+    </section>
+  </main>
+
+  <!-- BOOKING DIALOG -->
+  <dialog id="bookDialog" aria-labelledby="bookTitle">
+    <form id="bookForm" novalidate>
+      <div class="dialog-head">
+        <h2 id="bookTitle">Reserve a van</h2>
+        <button type="button" class="icon-btn" id="closeDialog" aria-label="Close">&times;</button>
+      </div>
+
+      <p id="signedInAs" class="hint" hidden></p>
+
+      <fieldset>
+        <legend>Dates (full days)</legend>
+        <div class="row2">
+          <label for="startDate">Start date
+            <input type="date" id="startDate" required>
+          </label>
+          <label for="endDate">End date
+            <input type="date" id="endDate" required>
+          </label>
+        </div>
+        <p id="dayCount" class="hint"></p>
+      </fieldset>
+
+      <fieldset>
+        <legend>Available vans</legend>
+        <div id="vanChoices" class="choices"></div>
+        <p id="unavailNote" class="hint"></p>
+      </fieldset>
+
+      <label for="team">Team
+        <select id="team" required></select>
+      </label>
+      <label for="otherTeam" id="otherTeamWrap" hidden>Team or group name
+        <input type="text" id="otherTeam">
+      </label>
+      <label for="driver">Driver name
+        <input type="text" id="driver" required autocomplete="name">
+      </label>
+      <label for="email" id="emailWrap">W&amp;L email
+        <input type="email" id="email" required autocomplete="email" placeholder="name@wlu.edu">
+      </label>
+      <label for="destination">Destination or event
+        <input type="text" id="destination">
+      </label>
+      <label for="notes">Notes
+        <textarea id="notes" rows="2"></textarea>
+      </label>
+
+      <p id="formError" class="error" role="alert"></p>
+
+      <div class="dialog-actions">
+        <button type="button" class="btn ghost" id="cancelBtn">Cancel</button>
+        <button type="submit" class="btn primary" id="submitBtn">Reserve</button>
+      </div>
+    </form>
+  </dialog>
+
+  <div id="toast" class="toast" role="status" aria-live="polite" hidden></div>
+
+  <!-- Microsoft sign-in library (MSAL) -->
+  <script src="https://alcdn.msauth.net/browser/2.38.3/js/msal-browser.min.js"></script>
+  <script src="config.js"></script>
+  <script src="app.js"></script>
+</body>
+</html>
